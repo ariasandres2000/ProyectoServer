@@ -12,7 +12,7 @@ namespace Api.Models
         }
 
         //Tablas
-        public DbSet<EntUsuario> usuarios;
-        public DbSet<EntIndicacion> indicacions;
+        public DbSet<EntUsuario> EntUsuarios { get; set; }
+        public DbSet<EntIndicacion> EntIndicacions { get; set; }
     }
 }
