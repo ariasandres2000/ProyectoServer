@@ -1,0 +1,29 @@
+CREATE DATABASE proyecto_api;
+
+DROP SCHEMA public;
+
+CREATE SCHEMA WEB;
+
+CREATE TABLE WEB.usuario(
+	id_usuario SERIAL NOT NULL,
+	nombre TEXT NOT NULL,
+	apellido TEXT NOT NULL,
+	correo TEXT NOT NULL,
+	contrasena TEXT NOT NULL,
+	tipo CHAR DEFAULT 'N'
+);
+
+ALTER TABLE WEB.usuario ADD CONSTRAINT PK_ID_USUARIO_USUARIO PRIMARY KEY(id_usuario);
+
+CREATE TABLE WEB.indicacion(
+	id_indicacion SERIAL NOT NULL,
+	id_usuario INT NOT NULL,
+	nombre TEXT NOT NULL,
+	tipo CHAR NOT NULL,
+	imagen BYTEA,
+	valor TEXT,
+	etiqueta TEXT []
+);
+
+ALTER TABLE WEB.indicacion ADD CONSTRAINT PK_ID_INDICACION_INDICACION PRIMARY KEY(id_indicacion);
+ALTER TABLE WEB.indicacion ADD CONSTRAINT FK_ID_USUARIO_INDICACION FOREIGN KEY(id_usuario) REFERENCES WEB.usuario(id_usuario);
