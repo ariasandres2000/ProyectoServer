@@ -19,7 +19,7 @@ CREATE TABLE WEB.indicacion(
 	id_indicacion SERIAL NOT NULL,
 	id_usuario INT NOT NULL,
 	nombre TEXT NOT NULL,
-	tipo CHAR NOT NULL,
+	tipo TEXT NOT NULL,
 	imagen BYTEA,
 	valor TEXT,
 	etiqueta TEXT []
