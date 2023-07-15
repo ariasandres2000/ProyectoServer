@@ -13,8 +13,8 @@ namespace Api.Models
         [Required(ErrorMessage = "Se requiere el nombre.")]
         public string nombre { get; set; }
         [Required(ErrorMessage = "Se requiere el tipo.")]
-        public char tipo { get; set; }
-        public byte imagen { get; set; }
+        public string tipo { get; set; }
+        public byte[]? imagen { get; set; }
         public string valor { get; set; }
         public string[] etiqueta { get; set; }
     }

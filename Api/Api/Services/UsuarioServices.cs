@@ -71,6 +71,7 @@ namespace Api.Services
                 usuario.contrasena = Herramienta.EncriptarContrasena(usuario.contrasena);
 
                 _dbContext.EntUsuarios.Add(usuario);
+                _dbContext.SaveChanges();
             }
             catch (Exception ex)
             {
