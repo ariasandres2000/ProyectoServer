@@ -49,6 +49,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularOrigins",
+    builder =>
+    {
+        builder.WithOrigins(
+                            "http://localhost:4200"
+                            )
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -61,6 +73,8 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Proyecto Api v1");
     });
 }
+
+app.UseCors("AllowAngularOrigins");
 
 app.UseHttpsRedirection();
 

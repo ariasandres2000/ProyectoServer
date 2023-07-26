@@ -4,6 +4,7 @@ using Api.Services;
 using Api.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Api.Controllers
 {
@@ -25,14 +26,26 @@ namespace Api.Controllers
         [AllowAnonymous]
         public ActionResult<string> Register(EntUsuario usuario)
         {
+            bool esError = false;
+            string msgError = "Usuario registrado de forma exitosa.";
+
             try
             {
                 if (!_usuarioServices.ValidarUsuario(usuario.correo))
-                    return BadRequest("El usuario se encuentra registrado.");
+                {
+                    esError = true;
+                    msgError = "El correo ya se encuentra registrado.";
+                }
 
                 _usuarioServices.Registrar(usuario);
 
-                return Ok("Usuario registrado de forma exitosa.");
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -44,17 +57,50 @@ namespace Api.Controllers
         [AllowAnonymous]
         public ActionResult<string> Session(EntLoginDTO login)
         {
+            bool esError = false;
+            string msgError = string.Empty;
+
             try
             {
                 if (string.IsNullOrEmpty(login.correo) && string.IsNullOrEmpty(login.contrasena))
-                    return BadRequest("Datos inválidos.");
+                {
+                    esError = true;
+                    msgError = "Datos inválidos.";
+                }
 
                 EntUsuario usuario = _usuarioServices.Login(login);
 
                 if (usuario == null)
-                    return BadRequest("Usuario y/o contraseña incorrectos.");
+                {
+                    esError = true;
+                    msgError = "Usuario y/o contraseña incorrectos.";
+                }
 
-                return Ok(Herramienta.GenerarToken(_config, usuario.correo.Split('@')[0]));
+                if (!esError)
+                {
+                    var respuesta = new
+                    {
+                        error = esError,
+                        mensajeError = msgError,
+                        token = Herramienta.GenerarToken(_config, usuario.correo.Split('@')[0]),
+                        data = usuario
+                    };
+
+                    return Ok(respuesta);
+                }
+                else
+                {
+                    var respuesta = new
+                    {
+                        error = esError,
+                        mensajeError = msgError,
+                        token = "",
+                        data = usuario
+                    };
+
+                    return Ok(respuesta);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -115,14 +161,26 @@ namespace Api.Controllers
 
         [HttpPost]
         public ActionResult Post(EntUsuario usuario) {
+            bool esError = false;
+            string msgError = string.Empty;
+
             try
             {
                 if (!_usuarioServices.ValidarUsuario(usuario.correo))
-                    return BadRequest("El usuario se encuentra registrado.");
+                {
+                    esError = true;
+                    msgError = "El correo ya se encuentra registrado.";
+                }
 
                 _usuarioServices.Registrar(usuario);
+                
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
 
-                return Ok();
+                return Ok(respuesta);               
             }
             catch (Exception ex)
             {

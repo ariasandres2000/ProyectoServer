@@ -7,7 +7,7 @@ namespace Api.Models
     public class EntUsuario
     {
         [Key]
-        public int id_usuario { get; set; }
+        public long id_usuario { get; set; }
         [Required(ErrorMessage = "Se requiere el nombre.")]
         public string nombre { get; set; }
         [Required(ErrorMessage = "Se requiere el apellido.")]
