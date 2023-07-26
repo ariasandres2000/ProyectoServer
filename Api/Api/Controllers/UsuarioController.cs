@@ -108,32 +108,24 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("UsuarioSesion")]
-        public ActionResult<EntUsuario> UsuarioSesion(string correo)
-        {
-            try
-            {
-                EntUsuario lUsuario = _usuarioServices.UsuarioSesion(correo);
-
-                if (lUsuario == null)
-                    return BadRequest("El usuario no se encuentra registrado.");
-
-                return Ok(lUsuario);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
         [HttpGet]
         public ActionResult<List<EntUsuario>> Get()
         {
+            bool esError = false;
+            string msgError = string.Empty;
+
             try
             {
                 List<EntUsuario> usuario = _usuarioServices.ObtenerUsuario();
 
-                return Ok(usuario);
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError,
+                    data = usuario
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -191,11 +183,20 @@ namespace Api.Controllers
         [HttpPatch]
         public ActionResult Patch(EntUsuario usuario)
         {
+            bool esError = false;
+            string msgError = string.Empty;
+
             try
             {
                 _usuarioServices.Actualizar(usuario);
 
-                return Ok();
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -206,11 +207,20 @@ namespace Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
+            bool esError = false;
+            string msgError = string.Empty;
+
             try
             {
                 _usuarioServices.Eliminar(id);
 
-                return Ok();
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {

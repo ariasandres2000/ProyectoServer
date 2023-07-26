@@ -20,11 +20,21 @@ namespace Api.Controllers
         [HttpGet("GetIndicacion")]
         public ActionResult<List<EntIndicacion>> GetIndicacion(long idUsuario)
         {
+            bool esError = false;
+            string msgError = "";
+
             try
             {
                 List<EntIndicacion> indicacion = _indicacionServices.ObtenerIndicacionUsuario(idUsuario);
 
-                return Ok(indicacion);
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError,
+                    data = indicacion
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -35,14 +45,35 @@ namespace Api.Controllers
         [HttpGet("{idIndicacion}")]
         public ActionResult<EntIndicacion> Get(long idIndicacion)
         {
+            bool esError = false;
+            string msgError = "";
+
             try
             {
                 EntIndicacion lIndicacion = _indicacionServices.ObtenerIndicacion(idIndicacion);
 
                 if (lIndicacion == null)
-                    return NoContent();
+                {
+                    var respuesta = new
+                    {
+                        error = esError,
+                        mensajeError = msgError,
+                        data = ""
+                    };
 
-                return Ok(lIndicacion);
+                    return Ok(respuesta);
+                } 
+                else
+                {
+                    var respuesta = new
+                    {
+                        error = esError,
+                        mensajeError = msgError,
+                        data = lIndicacion
+                    };
+
+                    return Ok(respuesta);
+                }
             }
             catch (Exception ex)
             {
@@ -53,11 +84,20 @@ namespace Api.Controllers
         [HttpPost]
         public ActionResult Post(EntIndicacion indicacion)
         {
+            bool esError = false;
+            string msgError = "";
+
             try
             {
                 _indicacionServices.Registrar(indicacion);
 
-                return Ok();
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -68,11 +108,20 @@ namespace Api.Controllers
         [HttpPatch]
         public ActionResult Patch(EntIndicacion indicacion)
         {
+            bool esError = false;
+            string msgError = "";
+
             try
             {
                 _indicacionServices.Actualizar(indicacion);
 
-                return Ok();
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -83,11 +132,20 @@ namespace Api.Controllers
         [HttpDelete("{idIndicacion}")]
         public ActionResult Delete(long idIndicacion)
         {
+            bool esError = false;
+            string msgError = "";
+
             try
             {
                 _indicacionServices.Eliminar(idIndicacion);
 
-                return Ok();
+                var respuesta = new
+                {
+                    error = esError,
+                    mensajeError = msgError
+                };
+
+                return Ok(respuesta);
             }
             catch (Exception ex)
             {

@@ -60,8 +60,9 @@ namespace Api.Services
 
                 lIndicacion.nombre = indicacion.nombre;
                 lIndicacion.tipo = indicacion.tipo;
-                lIndicacion.imagen = indicacion.imagen;
+                lIndicacion.instruccion = indicacion.instruccion;
                 lIndicacion.valor = indicacion.valor;
+                lIndicacion.cantidad = indicacion.cantidad;
                 lIndicacion.etiqueta = indicacion.etiqueta;
 
                 _dbContext.Entry(lIndicacion).State = EntityState.Modified;
@@ -83,7 +84,7 @@ namespace Api.Services
                     throw new Exception("La indicación no existe.");
 
                 _dbContext.EntIndicacions.Remove(indicacion);
-                //_dbContext.SaveChanges();
+                _dbContext.SaveChanges();
             }
             catch (Exception ex)
             {

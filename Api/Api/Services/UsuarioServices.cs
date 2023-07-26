@@ -28,23 +28,11 @@ namespace Api.Services
             }
         }
 
-        public EntUsuario UsuarioSesion(string correo)
-        {
-            try
-            {
-                return _dbContext.EntUsuarios.Where(p => p.correo.Equals(correo)).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public List<EntUsuario> ObtenerUsuario()
         {
             try
             {
-                return _dbContext.EntUsuarios.ToList();
+                return _dbContext.EntUsuarios.OrderBy(p => p.id_usuario).ToList();
             }
             catch (Exception ex)
             {
@@ -82,11 +70,14 @@ namespace Api.Services
         public void Actualizar(EntUsuario usuario)
         {
             try
-            {
+            {                
                 EntUsuario lUsuario = _dbContext.EntUsuarios.Where(p => p.id_usuario.Equals(usuario.id_usuario)).First();
                 lUsuario.nombre = usuario.nombre;
                 lUsuario.apellido = usuario.apellido;
-                lUsuario.contrasena = usuario.contrasena;
+                if (usuario.contrasena != lUsuario.contrasena)
+                {
+                    lUsuario.contrasena = Herramienta.EncriptarContrasena(usuario.contrasena);
+                }
                 lUsuario.tipo = usuario.tipo;
 
                 _dbContext.Entry(lUsuario).State = EntityState.Modified;
