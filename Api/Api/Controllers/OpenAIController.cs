@@ -41,34 +41,57 @@ namespace Api.Controllers
                 }
                 else
                 {
-                    string result = string.Empty;
-
                     if (lIndicacion.tipo.Equals("I"))
                     {
                         int cantidad = string.IsNullOrEmpty(lIndicacion.cantidad.ToString()) ? 1 : int.Parse(lIndicacion.cantidad.ToString());
 
-                        result = service.Imagen(lIndicacion.instruccion, cantidad, lIndicacion.valor);
+                        var result = service.Imagen(lIndicacion.instruccion, cantidad, lIndicacion.valor);
+
+                        var respuesta = new
+                        {
+                            error = false,
+                            mensajeError = "",
+                            data = result
+                        };
+
+                        return Ok(respuesta);
                     }
-
-                    if (lIndicacion.tipo.Equals("E"))
+                    else if (lIndicacion.tipo.Equals("E"))
                     {
-                        result = service.Editar(lIndicacion.valor, lIndicacion.instruccion);
+                        var result = service.Editar(lIndicacion.valor, lIndicacion.instruccion);
+
+                        var respuesta = new
+                        {
+                            error = false,
+                            mensajeError = "",
+                            data = result
+                        };
+
+                        return Ok(respuesta);
                     }
-
-                    if (lIndicacion.tipo.Equals("C"))
+                    else if (lIndicacion.tipo.Equals("C"))
                     {
-                        result = service.Terminacion(lIndicacion.instruccion);
-                    }
+                        var result = service.Terminacion(lIndicacion.instruccion);
 
-                    var respuesta = new
-                    {
-                        error = false,
-                        mensajeError = "",
-                        data = result
-                    };
+                        var respuesta = new
+                        {
+                            error = false,
+                            mensajeError = "",
+                            data = result
+                        };
 
-                    return Ok(respuesta);
+                        return Ok(respuesta);
+                    }                    
                 }
+
+                var respuestaq = new
+                {
+                    error = true,
+                    mensajeError = "Error interno",
+                    data = ""
+                };
+
+                return Ok(respuestaq);
             }
             catch (Exception ex)
             {

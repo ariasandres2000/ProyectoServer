@@ -1,21 +1,19 @@
-﻿using System.Net;
+﻿using Newtonsoft.Json;
+using System.Net;
+using System.Text;
 
 namespace Api.Services
 {
     public class AIServices
     {
         private HttpClient client = new HttpClient();
-        private string tokenAI = "";
-        private string organizacion = "";       
+        private string tokenAI = "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";
+        private string URL = "https://api.openai.com";
 
-        public string Imagen(string instruccion, int cantidad, string tamano)
+        public async Task<string> Imagen(string instruccion, int cantidad, string tamano)
         {
-            var url = "https://api.openai.com/v1/images/generations";
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.Headers.Add("Authorization", "Bearer " + tokenAI);
-            //request.Headers.Add("OpenAI-Organization", organizacion);
+            client.BaseAddress = new Uri(URL);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenAI);
 
             var valor = new
             {
@@ -24,18 +22,17 @@ namespace Api.Services
                 size = tamano
             };
 
-            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-            {
-                streamWriter.Write(valor);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
+            var content = new StringContent(JsonConvert.SerializeObject(valor), Encoding.UTF8, "application/json");
 
             try
             {
-                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                return reader.ReadToEnd();
+                var response = await client.PostAsync("/v1/images/generations", content);
+                var jsonRespuesta = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(jsonRespuesta))
+                    throw new Exception("Respuesta inesperada.");
+
+                return jsonRespuesta;
             }
             catch (WebException ex)
             {
@@ -43,14 +40,10 @@ namespace Api.Services
             }
         }
 
-        public string Editar(string entrada, string instruccion)
+        public async Task<string> Editar(string entrada, string instruccion)
         {
-            var url = "https://api.openai.com/v1/edits";
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.Headers.Add("Authorization", "Bearer " + tokenAI);
-            //request.Headers.Add("OpenAI-Organization", organizacion);
+            client.BaseAddress = new Uri(URL);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenAI);
 
             var valor = new
             {
@@ -59,18 +52,17 @@ namespace Api.Services
                 instruction = instruccion
             };
 
-            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-            {
-                streamWriter.Write(valor);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
+            var content = new StringContent(JsonConvert.SerializeObject(valor), Encoding.UTF8, "application/json");
 
             try
             {
-                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                return reader.ReadToEnd();
+                var response = await client.PostAsync("/v1/images/edits", content);
+                var jsonRespuesta = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(jsonRespuesta))
+                    throw new Exception("Respuesta inesperada.");
+
+                return jsonRespuesta;
             }
             catch (WebException ex)
             {
@@ -78,14 +70,10 @@ namespace Api.Services
             }
         }
 
-        public string Terminacion(string entrada)
+        public async Task<string> Terminacion(string entrada)
         {
-            var url = "https://api.openai.com/v1/completions";
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.Headers.Add("Authorization", "Bearer " + tokenAI);
-            //request.Headers.Add("OpenAI-Organization", organizacion);
+            client.BaseAddress = new Uri(URL);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenAI);
 
             var valor = new
             {
@@ -95,18 +83,17 @@ namespace Api.Services
                 temperature = 0
             };
 
-            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-            {
-                streamWriter.Write(valor);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
+            var content = new StringContent(JsonConvert.SerializeObject(valor), Encoding.UTF8, "application/json");
 
             try
             {
-                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                return reader.ReadToEnd();
+                var response = await client.PostAsync("/v1/images/edits", content);
+                var jsonRespuesta = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrEmpty(jsonRespuesta))
+                    throw new Exception("Respuesta inesperada.");
+
+                return jsonRespuesta;
             }
             catch (WebException ex)
             {

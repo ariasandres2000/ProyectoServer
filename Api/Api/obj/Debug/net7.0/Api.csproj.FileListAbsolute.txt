@@ -42,3 +42,4 @@ C:\Proyectos\Mango\ProyectoServer\Api\Api\obj\Debug\net7.0\refint\Api.dll
 C:\Proyectos\Mango\ProyectoServer\Api\Api\obj\Debug\net7.0\Api.pdb
 C:\Proyectos\Mango\ProyectoServer\Api\Api\obj\Debug\net7.0\Api.genruntimeconfig.cache
 C:\Proyectos\Mango\ProyectoServer\Api\Api\obj\Debug\net7.0\ref\Api.dll
+C:\Proyectos\Mango\ProyectoServer\Api\Api\bin\Debug\net7.0\Newtonsoft.Json.dll
